@@ -1,0 +1,38 @@
+---
+title: "Edit_Figures_from_C_bioportal"
+output: html_document
+date: "2022-10-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Here I will be editing/ formatting figures from Cbioportal so that the formatting is consistent and the image quality will be the same. 
+
+```{r}
+data_mutational_load <- read.csv("~/Downloads/Time_Point_vs_Mutation_Count.csv")
+```
+
+```{r}
+library(ggplot2)
+```
+
+#I want a scatterplot with y axis as mutational load, x as time points, and colored by time point 
+```{r}
+x= c(0,1,4,7)
+col = c("0"= "#453781FF", "1"= "#2D708EFF", "4"= "#29AF7FFF", "7"= "#DCE319FF")
+ggplot(data=data_mutational_load, aes(x=Time.Point, y=Mutation.Count, color= factor(Time.Point), group= Time.Point, fill=factor(Time.Point))) + geom_point(size=7) + theme(legend.position= "none") + labs(x= "Passage", y= "Total Mutation Count", title= "Whole Exome Sequencing Mutational Burden") + theme(text = element_text(size = 20)) + theme(panel.background = element_blank(), panel.grid.major= element_line()) + theme(axis.line = element_line(colour = "black")) + scale_x_continuous(breaks= x)
+ggsave("mutational_burden_scatter.png", width = 12, height = 8) 
+```
+#This is also the bar graph of the same information 
+```{r}
+x= c(0,1,4,7)
+col = c("0"= "#453781FF", "1"= "#2D708EFF", "4"= "#29AF7FFF", "7"= "#DCE319FF")
+ggplot(data=data_mutational_load, aes(x=Time.Point, y=Mutation.Count, color= Time.Point, group= Time.Point, fill=factor(Time.Point))) +geom_bar(stat="identity", position="dodge", color="black") + theme(legend.position= "none") + labs(x= "Passage", y= "Total Mutation Count", title= "Whole Exome Sequencing Mutational Burden") + theme(text = element_text(size = 15)) + theme(panel.background = element_blank(), panel.grid.major= element_line()) + theme(axis.line = element_line(colour = "black")) + scale_x_discrete(limits= x) 
+ggsave("mutational_burden_bar.png", width = 12, height = 8) 
+```
+
+
+
+
